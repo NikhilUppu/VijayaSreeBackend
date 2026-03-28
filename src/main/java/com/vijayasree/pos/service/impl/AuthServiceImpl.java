@@ -33,8 +33,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
+        //temporary
+        log.info("FRESH HASH: {}", passwordEncoder.encode("vst@2026"));
 
-        // ← Check rate limit first
+        // Check rate limit first
         loginRateLimiter.isAllowed(request.getUsername());
 
         User user = userRepository.findByUsernameIgnoreCase(request.getUsername())
