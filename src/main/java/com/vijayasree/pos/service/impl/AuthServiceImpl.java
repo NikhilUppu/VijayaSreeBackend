@@ -33,8 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        //temporary
-        log.info("FRESH HASH: {}", passwordEncoder.encode("vst@2026"));
+
 
         // Check rate limit first
         loginRateLimiter.isAllowed(request.getUsername());
@@ -49,9 +48,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            log.info("DEBUG - input password: {}", request.getPassword());
-            log.info("DEBUG - stored hash: {}", user.getPasswordHash());
-            log.info("DEBUG - hash length: {}", user.getPasswordHash().length());
 
             throw new IllegalArgumentException("Invalid username or password");
         }
