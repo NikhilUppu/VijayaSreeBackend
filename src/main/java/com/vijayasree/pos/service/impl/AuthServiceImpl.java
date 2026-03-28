@@ -47,6 +47,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            log.info("DEBUG - input password: {}", request.getPassword());
+            log.info("DEBUG - stored hash: {}", user.getPasswordHash());
+            log.info("DEBUG - hash length: {}", user.getPasswordHash().length());
+
             throw new IllegalArgumentException("Invalid username or password");
         }
 
