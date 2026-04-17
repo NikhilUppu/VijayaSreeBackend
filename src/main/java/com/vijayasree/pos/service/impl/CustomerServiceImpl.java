@@ -174,11 +174,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private CustomerResponse toResponse(Customer c) {
-        List<Sale> sales = saleRepository.findByCustomerIdOrderByCreatedAtDesc(c.getId());
-        BigDecimal totalSpent = sales.stream()
-                .map(Sale::getGrandTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         return CustomerResponse.builder()
                 .id(c.getId())
                 .name(c.getName())
@@ -188,9 +183,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .creditLimit(c.getCreditLimit())
                 .creditBalance(c.getCreditBalance())
                 .active(c.getActive())
-                .totalOrders(sales.size())
-                .totalSpent(totalSpent)
-                .lastVisit(sales.isEmpty() ? null : sales.get(0).getCreatedAt())
+                .totalOrders((int) saleRepository.countByCustomerId(c.getId()))
+                .totalSpent(saleRepository.sumGrandTotalByCustomerId(c.getId()))
+                .lastVisit(saleRepository.findLastVisitByCustomerId(c.getId()).orElse(null))
                 .createdAt(c.getCreatedAt())
                 .build();
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
@@ -24,6 +25,16 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
     List<Sale> findByCustomerIdOrderByCreatedAtDesc(Long customerId);
+
+    @Query("SELECT COUNT(s) FROM Sale s WHERE s.customer.id = :customerId")
+    long countByCustomerId(@Param("customerId") Long customerId);
+
+    @Query("SELECT COALESCE(SUM(s.grandTotal), 0) FROM Sale s WHERE s.customer.id = :customerId")
+    java.math.BigDecimal sumGrandTotalByCustomerId(@Param("customerId") Long customerId);
+
+    @Query("SELECT MAX(s.createdAt) FROM Sale s WHERE s.customer.id = :customerId")
+    Optional<LocalDateTime> findLastVisitByCustomerId(@Param("customerId") Long customerId);
+
     @Modifying
     @Transactional
     @Query("UPDATE Sale s SET s.soldBy = null WHERE s.soldBy.id = :userId")
