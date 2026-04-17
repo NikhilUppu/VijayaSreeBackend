@@ -30,7 +30,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173","https://vijaya-sree-ui.vercel.app","https://vijayasreeui.vercel.app"));
+                    config.setAllowedOrigins(List.of(
+                            "http://localhost:5173",
+                            "https://vijaya-sree-ui.vercel.app",
+                            "https://vijayasreeui.vercel.app",
+                            "https://vijayasreetraders.com",
+                            "https://www.vijayasreetraders.com"
+                    ));
                     config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
