@@ -238,4 +238,20 @@ public class SaleServiceImpl implements SaleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found: " + id));
         return toResponse(sale);
     }
+
+    @Override
+    public List<SaleResponse> getUnprinted() {
+        return saleRepository.findByPrintedFalseOrderByCreatedAtAsc()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void markPrinted(Long id) {
+        Sale sale = saleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sale not found: " + id));
+        sale.setPrinted(true);
+        saleRepository.save(sale);
+    }
 }

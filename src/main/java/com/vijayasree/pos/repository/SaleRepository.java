@@ -39,4 +39,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Transactional
     @Query("UPDATE Sale s SET s.soldBy = null WHERE s.soldBy.id = :userId")
     void clearSoldBy(@Param("userId") Long userId);
+
+    // Used by Print Station on reconnect to catch up on missed bills
+    List<Sale> findByPrintedFalseOrderByCreatedAtAsc();
 }

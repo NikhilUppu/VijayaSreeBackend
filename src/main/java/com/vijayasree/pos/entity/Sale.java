@@ -77,7 +77,10 @@ public class Sale {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-
+    // False until the cashier's Print Station confirms it was sent to the printer
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean printed = false;
 
     public enum DiscountType {
         FLAT, PERCENTAGE
